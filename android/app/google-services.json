@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "647528735948",
+    "project_id": "chatapp-fb6b3",
+    "storage_bucket": "chatapp-fb6b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647528735948:android:c1b64d82433da95ea70e69",
+        "android_client_info": {
+          "package_name": "com.imad.chat_app_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647528735948-31u044jccbfg8ih5ib216javvrbl8f9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUp_eQ3RcNsw_4n5j2OtgzboSGuNopjy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647528735948-31u044jccbfg8ih5ib216javvrbl8f9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
