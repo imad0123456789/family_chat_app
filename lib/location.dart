@@ -1,7 +1,10 @@
 import 'package:chat_app_project/screens/chat_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+
+final _firestore = FirebaseFirestore.instance; // cloud
 
 class LocationPage extends StatefulWidget {
   static const String screenRoute ='location_page';
@@ -76,6 +79,17 @@ class _LocationPageState extends State<LocationPage> {
     });
   }
 
+  Future<void> _sendLocation() async{
+    setState(() {});
+    _firestore.collection('messages').add({
+      'text':"ADDRESS: ${_currentAddress ?? ""}. LAT:${_currentPosition?.latitude ?? ""},LNG: ${_currentPosition?.longitude ?? ""}",
+      'sender': signedInUser.email,
+      'time': FieldValue.serverTimestamp(),
+      'type': "location",
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,8 +109,12 @@ class _LocationPageState extends State<LocationPage> {
 
               ),
 
-              ElevatedButton(
-                onPressed: _getCurrentPosition,
+
+              TextButton(
+                onPressed: (){
+                  _sendLocation();
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => ChatScreen()));
+                },
                 child: const Text("Send Current Location"),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.red),

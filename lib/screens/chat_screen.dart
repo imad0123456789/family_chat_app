@@ -27,6 +27,8 @@ class ChatScreen extends StatefulWidget {
 }
 final _auth = FirebaseAuth.instance;
 
+
+
 class _ChatScreenState extends State<ChatScreen> {
 
   final _authE = FirebaseAuth.instance.currentUser?.email;
@@ -36,6 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String? messageText; // this will give as the message
   String? location = ""; // this will give as the location
+  String? _currentAddress;
 
 
   File? imageFile;
@@ -73,10 +76,9 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       print(imageUrl);
     }
-
-
-
   }
+
+
 
   @override
   void initState() {
@@ -338,7 +340,32 @@ class MessageLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return 'type' == "img" ? Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment:
+        isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$sender',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.yellow[900],
+            ),
+          ),
+          Container(
+            child: Image.network('text'),
+          ),
+          Text(
+            '${time?.toDate().hour}:${time?.toDate().minute}',
+            //"${DateTime.now().hour}:${DateTime.now().minute}",
+            style: TextStyle(fontSize: 10, color: Colors.red),
+          ),
+        ],
+      ),
+    )
+        // if type = text
+        : Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
@@ -384,20 +411,21 @@ class MessageLine extends StatelessWidget {
         ],
       ),
     );
-    /*
-     : Container(
-      height: 2.5,
-      width: 2.5,
-      alignment:  'sender'== _auth.currentUser!.displayName
-              ? Alignment.centerLeft
-             : Alignment.centerRight,
-           child: Container(
-             height: 2.5,
-            width: 2,
-            child: 'text' != "" ? Image.network('text')
-           : CircularProgressIndicator(),
-      ),
-    );
-     */
+
   }
 }
+
+/*
+: Container(
+        height: 2.5,
+        width:2.5,
+        alignment:  'sender'== _auth.currentUser!.displayName
+        ? Alignment.centerLeft
+            : Alignment.centerRight,
+        child: Container(
+        height: 2.5,
+        width: 2.5,
+        child: 'text' != "" ? Image.network('text')
+        : CircularProgressIndicator(),
+    ),
+ */
