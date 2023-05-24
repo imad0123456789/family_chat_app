@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:chat_app_project/location.dart';
 import 'package:chat_app_project/screens/registration_screen.dart';
+import 'package:chat_app_project/screens/welcome_screen.dart';
 import 'package:chat_app_project/widgets/add_to_gallery.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           // Perform sign out operation here
                           Navigator.of(context).pop(true);
                           _auth.signOut();
-                          Navigator.pop(context);
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => WelcomeScreen()));
                         },
                         child: Text('Sign Out'),
                       ),
@@ -340,7 +341,7 @@ class MessageLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 'type' == "img" ? Padding(
+    return type == "img" ? Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
@@ -354,7 +355,9 @@ class MessageLine extends StatelessWidget {
             ),
           ),
           Container(
-            child: Image.network('text'),
+            height: 150,
+            width: 150,
+            child: Image.network(text!),
           ),
           Text(
             '${time?.toDate().hour}:${time?.toDate().minute}',
@@ -365,6 +368,7 @@ class MessageLine extends StatelessWidget {
       ),
     )
         // if type = text
+
         : Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(

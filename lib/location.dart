@@ -99,6 +99,10 @@ class _LocationPageState extends State<LocationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                height: 180,
+                child: Image.asset('images/googlemap.png'),
+              ),
               Text('LAT: ${_currentPosition?.latitude ?? ""}'),
               Text('LNG: ${_currentPosition?.longitude ?? ""}'),
               Text('ADDRESS: ${_currentAddress ?? ""}'),

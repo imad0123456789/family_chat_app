@@ -292,8 +292,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final pickedFile = await _picker.getImage(
       source: source,
     );
+    imageBytes = await pickedFile?.readAsBytes();
     setState(() {
-      imageBytes = pickedFile?.readAsBytes() as Uint8List?;
+
     });
   }
 
