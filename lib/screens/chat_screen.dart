@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:chat_app_project/location.dart';
 import 'package:chat_app_project/screens/registration_screen.dart';
 import 'package:chat_app_project/screens/welcome_screen.dart';
@@ -11,8 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:intl/intl.dart';
-import 'package:chat_app_project/screens/registration_screen.dart';
 import 'package:uuid/uuid.dart';
 
 final _firestore = FirebaseFirestore.instance; // cloud
@@ -39,9 +35,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String? messageText; // this will give as the message
   String? location = ""; // this will give as the location
-  String? _currentAddress;
-
-
   File? imageFile;
 
 
@@ -55,15 +48,20 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Future takeImage() async {
+    ImagePicker _picker = ImagePicker();
+    await _picker.pickImage(source: ImageSource.camera).then((xFile) {
+      if (xFile != null){
+        imageFile = File(xFile.path);
+        uploadImage();
+      }
+    });
+  }
+
+
   Future uploadImage() async{
     String fileName = Uuid().v1();
     int status = 1;
-    await  _firestore.collection('messages').doc(fileName).set({
-      'text': "",
-      'sender': signedInUser.email,
-      'type': "img",
-      'time': FieldValue.serverTimestamp(),
-    });
     var ref = FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!).catchError((error) async{
       await  _firestore.collection('messages').doc(fileName).delete();
@@ -72,20 +70,88 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if(status ==1){
       String imageUrl = await uploadTask.ref.getDownloadURL();
-      await  _firestore.collection('messages').doc(fileName).update({
-        'text': imageUrl
+      await  _firestore.collection('messages').doc(fileName).set({
+        'text': imageUrl,
+        'sender': signedInUser.email,
+        'type': "img",
+        'time': FieldValue.serverTimestamp(),
       });
       print(imageUrl);
     }
+
+
+
+
   }
 
+  Widget addBotton() {
+    return Container(
+        height: 150,
+        //width: 20,
+        margin: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => LocationPage()));
+                  },
+                  icon: Icon(Icons.location_on),
+                  color: Colors.red,
+                ),
+                Text('Location', style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),),
+              ],
+            ),
 
+            //get image button
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => getImage(),
+                  icon: Icon(Icons.image),
+                  color: Colors.blue[800],
+                ),
+                Text('Gellary', style: TextStyle(
+                  color: Colors.blue[800],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),),
+              ],
+            ),
+
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => takeImage(),
+                  icon: Icon(Icons.camera_alt),
+                  color: Colors.green,
+                ),
+                Text('Camera', style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),),
+              ],
+            ),
+
+
+          ],
+        )
+    );
+  }
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
-
   }
 
   void getCurrentUser() {
@@ -123,13 +189,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   backgroundImage: NetworkImage(snapshot.data!),
                 );
               },
-            ),
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: InkWell(
-                onTap: () {},
-              ),
             ),
           ],
         ));
@@ -179,9 +238,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 },
               );
-              //messagesStreams();
-              //  _auth.signOut();
-              //  Navigator.pop(context);
             }, // log out function
             icon: Icon(Icons.login_outlined),
           )
@@ -205,18 +261,15 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //location button
                   IconButton(
-                    onPressed: () async {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => LocationPage()));
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        //backgroundColor: Color.fromARGB(100, 255, 100, 100),
+                        builder: ((builder) => addBotton()),
+                      );
                     },
-                    icon: Icon(Icons.location_on),
-                    color: Colors.blue[800],
-                  ),
-                  //get image button
-                  IconButton(
-                    onPressed: () => getImage(),
-                    icon: Icon(Icons.image),
+                    icon: Icon(Icons.add),
                     color: Colors.blue[800],
                   ),
                   Expanded(
@@ -324,12 +377,8 @@ class MessageStreamBuilder extends StatelessWidget {
 }
 
 class MessageLine extends StatelessWidget {
-  const MessageLine(
-      {this.text,
-        this.sender,
-        this.type,
-        required this.time,
-        required this.isMe,
+  const MessageLine({
+    this.text,this.sender,this.type,required this.time, required this.isMe,
         Key? key})
       : super(key: key);
 
@@ -368,7 +417,6 @@ class MessageLine extends StatelessWidget {
       ),
     )
         // if type = text
-
         : Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -419,17 +467,3 @@ class MessageLine extends StatelessWidget {
   }
 }
 
-/*
-: Container(
-        height: 2.5,
-        width:2.5,
-        alignment:  'sender'== _auth.currentUser!.displayName
-        ? Alignment.centerLeft
-            : Alignment.centerRight,
-        child: Container(
-        height: 2.5,
-        width: 2.5,
-        child: 'text' != "" ? Image.network('text')
-        : CircularProgressIndicator(),
-    ),
- */
