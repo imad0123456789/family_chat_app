@@ -119,9 +119,11 @@ class _LocationPageState extends State<LocationPage> {
                   _sendLocation();
                   Navigator.push(context,MaterialPageRoute(builder: (context) => ChatScreen()));
                 },
-                child: const Text("Send Current Location"),
+                child: const Text("Send Current Location", style: TextStyle(
+                  color: Colors.white
+                ),),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                  backgroundColor: MaterialStateProperty.all(Colors.red[900]),
                 ),
 
               )

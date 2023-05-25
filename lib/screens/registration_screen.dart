@@ -186,31 +186,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 imageBytes == null
                     ? Image.asset('images/unknown.png')
                     : Image.memory(imageBytes!),
-
-
               ),
             ),
-        /*
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            border: Border.all(width: 4, color: Colors.white),
-            boxShadow: [
-              BoxShadow(
-                  spreadRadius: 2,
-                  blurRadius: 10,
-                  color: Colors.black.withOpacity(0.1))
-            ],
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('images/unknown.png'),
-            ),
-          ),
-        ),
-        
-         */
             Positioned(
                 bottom: 0,
                 right: 0,

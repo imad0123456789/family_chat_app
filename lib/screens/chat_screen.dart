@@ -101,11 +101,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     Navigator.push(context,MaterialPageRoute(builder: (context) => LocationPage()));
                   },
                   icon: Icon(Icons.location_on),
-                  color: Colors.red,
+                  color: Colors.blue[800],
                 ),
                 Text('Location', style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  //fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),),
               ],
@@ -120,8 +120,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   color: Colors.blue[800],
                 ),
                 Text('Gellary', style: TextStyle(
-                  color: Colors.blue[800],
-                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  //fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),),
               ],
@@ -132,11 +132,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 IconButton(
                   onPressed: () => takeImage(),
                   icon: Icon(Icons.camera_alt),
-                  color: Colors.green,
+                  color: Colors.blue[800],
                 ),
                 Text('Camera', style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  //fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),),
               ],
