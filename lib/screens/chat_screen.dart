@@ -1,7 +1,5 @@
 import 'package:chat_app_project/location.dart';
-import 'package:chat_app_project/screens/registration_screen.dart';
 import 'package:chat_app_project/screens/welcome_screen.dart';
-import 'package:chat_app_project/widgets/add_to_gallery.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   }
 
-  Widget addBotton() {
+  Widget addButton() {
     return Container(
         height: 150,
         //width: 20,
@@ -119,7 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   icon: Icon(Icons.image),
                   color: Colors.blue[800],
                 ),
-                Text('Gellary', style: TextStyle(
+                Text('Gallery', style: TextStyle(
                   color: Colors.black,
                   //fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -266,7 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       showModalBottomSheet(
                         context: context,
                         //backgroundColor: Color.fromARGB(100, 255, 100, 100),
-                        builder: ((builder) => addBotton()),
+                        builder: ((builder) => addButton()),
                       );
                     },
                     icon: Icon(Icons.add),
@@ -445,7 +443,7 @@ class MessageLine extends StatelessWidget {
               bottomRight: Radius.circular(25),
             ),
             color: isMe ? Colors.blue[800] : Colors.white,
-            // cheack who sende the message
+            // check who send the message
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
