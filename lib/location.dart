@@ -21,11 +21,10 @@ class _LocationPageState extends State<LocationPage> {
   String? _currentAddress;
   Position? _currentPosition;
 
-
+// ask to take permission to use loaction from mobile
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -53,7 +52,6 @@ class _LocationPageState extends State<LocationPage> {
 
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
-
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
@@ -107,13 +105,14 @@ class _LocationPageState extends State<LocationPage> {
               Text('LNG: ${_currentPosition?.longitude ?? ""}'),
               Text('ADDRESS: ${_currentAddress ?? ""}'),
               const SizedBox(height: 32),
+              //Get Current Location button
               ElevatedButton(
                 onPressed: _getCurrentPosition,
                 child: const Text("Get Current Location"),
 
               ),
 
-
+              // send location button
               TextButton(
                 onPressed: (){
                   _sendLocation();
@@ -125,7 +124,6 @@ class _LocationPageState extends State<LocationPage> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.red[900]),
                 ),
-
               )
             ],
           ),

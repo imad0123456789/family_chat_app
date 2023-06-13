@@ -138,6 +138,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   setState(() {
                     spinner = true;
                   });
+                  //create new user in firebase
                   try {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);

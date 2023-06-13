@@ -35,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String? location = ""; // this will give as the location
   File? imageFile;
 
-
+// get Image from gallery
   Future getImage() async {
     ImagePicker _picker = ImagePicker();
     await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
@@ -45,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
   }
-
+// get Image from camera
   Future takeImage() async {
     ImagePicker _picker = ImagePicker();
     await _picker.pickImage(source: ImageSource.camera).then((xFile) {
@@ -65,7 +65,6 @@ class _ChatScreenState extends State<ChatScreen> {
       await  _firestore.collection('messages').doc(fileName).delete();
       status = 0;
     });
-
     if(status ==1){
       String imageUrl = await uploadTask.ref.getDownloadURL();
       await  _firestore.collection('messages').doc(fileName).set({
@@ -76,10 +75,6 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       print(imageUrl);
     }
-
-
-
-
   }
 
   Widget addButton() {
@@ -92,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         child: Column(
           children: <Widget>[
+            //get location button
             Row(
               children: [
                 IconButton(
@@ -124,7 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),),
               ],
             ),
-
+                 //get camera button
             Row(
               children: [
                 IconButton(
@@ -139,8 +135,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),),
               ],
             ),
-
-
           ],
         )
     );
@@ -171,7 +165,6 @@ class _ChatScreenState extends State<ChatScreen> {
             FutureBuilder(
               initialData: null,
               future: getProfileImage(),
-
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
@@ -192,14 +185,17 @@ class _ChatScreenState extends State<ChatScreen> {
         ));
   }
 
-  // AppBar
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar
       appBar: AppBar(
         backgroundColor: Colors.yellow[900],
-        title: Row(
+        title:
+            //display imageProfile and email
+        Row(
           children: [
             imageProfile(),
             SizedBox(
@@ -215,6 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
+                  //
                   return AlertDialog(
                     title: Text('Sign Out !'),
                     content: Text('Are you sure you want to sign out?'),
@@ -252,13 +249,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 border: Border(
                   top: BorderSide(
                     color: Colors.orange,
-                    width: 2,
+                    width: 5,
                   ),
                 ),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //Add button
                   IconButton(
                     onPressed: () {
                       showModalBottomSheet(
@@ -328,15 +326,18 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
+//get message from firestore by update
 class MessageStreamBuilder extends StatelessWidget {
   const MessageStreamBuilder({Key? key}) : super(key: key);
 
+  // to get messages from database
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection('messages').orderBy('time').snapshots(),
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
+        //test if i have data in snapshot
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(
@@ -344,6 +345,7 @@ class MessageStreamBuilder extends StatelessWidget {
             ),
           );
         }
+        //to display messages on screen
         final messages = snapshot.data!.docs.reversed;
         for (var message in messages) {
           final messagesText = message.get('text');
@@ -386,6 +388,9 @@ class MessageLine extends StatelessWidget {
   final Timestamp? time;
   final bool isMe;
 
+
+
+  //to display message
   @override
   Widget build(BuildContext context) {
     return type == "img" ? Padding(
@@ -414,10 +419,10 @@ class MessageLine extends StatelessWidget {
         ],
       ),
     )
-        // if type = text
+        // if type not img
         : Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Column(
+        child: Column(
         crossAxisAlignment:
         isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
