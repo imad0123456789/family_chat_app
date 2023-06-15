@@ -1,5 +1,7 @@
 import 'package:chat_app_project/screens/chat_screen.dart';
 import 'package:chat_app_project/screens/welcome_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../widgets/my_botton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +21,8 @@ class _SignInScreenState extends State<SignInScreen> {
   late String email;
   late String password;
   bool spinner = false;
-
+  FirebaseFirestore firebase = FirebaseFirestore.instance;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,6 +140,34 @@ class _SignInScreenState extends State<SignInScreen> {
                           email: email,
                           password: password);
                       if( user != null){
+                        CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
+
+                        // Query the collection to find the document with the given email
+                        Query query = usersCollection.where('email', isEqualTo: email);
+
+                        // Get the documents that match the query
+                        String? ID =  await query.get().then((QuerySnapshot snapshot) {
+                          if (snapshot.size > 0) {
+                            // Return the document ID of the first document
+                            return snapshot.docs[0].id;
+                          } else {
+                            // No document found with the given email
+                            return null;
+                          }
+                        }).catchError((error) {
+                          // Handle any errors that occur
+                          print('Error getting user document ID: $error');
+                          return null;
+                        });
+                        String? token = await messaging.getToken();
+                        print("token=  ${token} ID= ${ID}");
+                        firebase.collection("Users").doc(ID).update({"fcmToken": token})
+                            .then((value) {
+                          print('FCM token updated successfully');
+                        })
+                            .catchError((error) {
+                          print('Failed to update FCM token: $error');
+                        });
                         Navigator.pushNamed(context, ChatScreen.screenRoute);
                         setState(() {
                           spinner = false ;

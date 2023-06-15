@@ -197,7 +197,15 @@ class _ChatScreenState extends State<ChatScreen> {
             //display imageProfile and email
         Row(
           children: [
-            imageProfile(),
+            Container(
+              width: 50,
+              height: 50,
+              child: CircleAvatar(
+                radius: 20,
+                child: Image.asset('images/unknown.png'),
+              ),
+            ),
+            //imageProfile(),
             SizedBox(
               width: 10,
             ),
