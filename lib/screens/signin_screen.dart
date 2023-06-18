@@ -168,6 +168,15 @@ class _SignInScreenState extends State<SignInScreen> {
                             .catchError((error) {
                           print('Failed to update FCM token: $error');
                         });
+                        // Last sign in notification
+                        firebase.collection("Users").doc(ID).update({"lastSignIn": FieldValue.serverTimestamp()})
+                            .then((value) {
+                          print('Last sign in in updated successfully');
+                        })
+                            .catchError((error) {
+                          print('Failed to update FCM token: $error');
+                        });
+
                         Navigator.pushNamed(context, ChatScreen.screenRoute);
                         setState(() {
                           spinner = false ;

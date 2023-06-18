@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io' show Platform;
 import 'firebase_options.dart';
 import 'location.dart';
 
@@ -100,6 +99,7 @@ void _handleIncomingMessage(RemoteMessage message, FlutterLocalNotificationsPlug
     );
   }
 }
+
 const firestoreEmulatorPort = 8080;
 const storageEmulatorPort = 9199;
 const authEmulatorPort = 9099;
