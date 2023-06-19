@@ -169,7 +169,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           print('Failed to update FCM token: $error');
                         });
                         // Last sign in notification
-                        firebase.collection("Users").doc(ID).update({"lastSignIn": FieldValue.serverTimestamp()})
+                        firebase.collection("Users").doc(ID).update({"lastSeen": FieldValue.serverTimestamp()})
                             .then((value) {
                           print('Last sign in in updated successfully');
                         })
